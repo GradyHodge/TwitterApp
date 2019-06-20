@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    	<link rel="stylesheet" href="/custom.css">
+		<title>Tweet This</title>
+	</head>
+	<body>
+		<div class="container">
+			<div th:replace="fragments/navbar"></div>
+			<h2>Profile for 
+			<span th:text="${user.firstName}"></span>
+			<span th:text="${user.lastName}"></span> - <span style="color: #00aced">
+			@<span th:text="${user.username}"></span></span>
+			</h2>
+ 			<h5>Joined <span th:text="${#dates.format(user.createdAt, 'M/d/yy')}"></span></h5>
+			<h3>Tweets</h3>
+			<div class="list-group" th:each="tweet:${tweetList}">
+				<div class="list-group-item list-group-item-action">
+ 					<div class="d-flex w-100 justify-content-between">
+						 <h5>@<span th:text="${tweet.user.username}"></span>
+							 <span th:text="${tweet.date}"></span>
+						</h5> 
+					</div>
+					<p class="mb-1" th:utext="${tweet.message}"></p>
+				</div>
+ 				<form th:action="@{/follow/} + ${user.username}" th:if="${!following && !isSelfPage}" method="post">
+					<button style="float:right" type="submit" class="btn btn-lg btn-success">Follow</button>
+				</form>
+				<form th:action="@{/unfollow/} + ${user.username}" th:if="${following && !isSelfPage}" method="post">
+					<button style="float:right" type="submit" class="btn btn-lg btn-primary unfolloow_btn">Following</button>
+				</form>
+			</div>
+			<div th:if="${#lists.isEmpty(tweetList)}">
+				<h3>No Recent Tweets</h3>
+			</div> 
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    	<script src="/custom.js"></script>
+	</body>
+</html>

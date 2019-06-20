@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    	<link rel="stylesheet" href="/custom.css">
+	</head>
+	
+	<body>
+		<div class="container">
+
+		<div th:replace="fragments/navbar"></div>
+		<ul class="nav nav-tabs">
+			<li role="presentation" th:classappend="${filter == 'all' ? 'active' : ''}">
+				<a href="/tweets">All</a>
+			</li>
+			<li role="presentation" th:classappend="${filter == 'following' ? 'active' : ''}">
+				<a href="/tweets?filter=following">Following</a>
+			</li>
+		</ul>
+			<div th:if="${not #lists.isEmpty(tweetList)}">
+				<h2>Tweets</h2>
+ 				<div th:each="tweet:${tweetList}">
+ 					<h5>@
+						<span th:text="${tweet.user.username}"></span> 
+					  	<span th:text="${tweet.date}"></span> 
+					</h5>
+					<div th:if="${#lists.isEmpty(tweetList)}">
+						<h3>No Recent Tweets</h3>
+					</div>
+					<p th:utext="${tweet.message}"></p>
+				</div>  
+			</div>
+			<div th:if="${#lists.isEmpty(tweetList) and filter == 'all'}">
+				<h3>No tweets have been created yet</h3>
+			</div>
+			<div th:if="${#lists.isEmpty(tweetList) and filter == 'following'}">
+				<h3>No tweets have been created by your followers</h3>
+			</div>
+		</div>
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    	<script src="/custom.js"></script>
+	</body>
+</html>
